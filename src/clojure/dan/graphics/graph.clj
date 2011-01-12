@@ -1,12 +1,18 @@
 (ns dan.graphics.graph
   (:import
     java.awt.Color
+    (java.awt.geom Line2D$Double Point2D$Double)
     javax.swing.JComponent))
 
-(defn- draw-line
-  "Auxiliary function to draw a line in a Clojure way"
-  [g x1 y1 x2 y2]
-  (.drawLine g x1 y1 x2 y2))
+(defn- point2d
+  "Point2D.Double constructor"
+  [x y]
+  (Point2D$Double. x y))
+
+(defn- line2d
+  "Line2D.Double constructor"
+  [p1 p2]
+  (Line2D$Double. p1 p2))
 
 (defn create-graph
   "Creates a graph"
@@ -21,15 +27,15 @@
             ys (map fnc xs)
             minval (apply min ys)
             maxval (apply max ys)
-            pts (map vector xs ys)
+            pts (map point2d xs ys)
             point-to-screen (fn [p]
-                              (vector
-                                (* (/ (- (first p) a) (- b a)) width)
-                                (- height (* (/ (- (second p) minval) (- maxval minval)) height))))
+                              (point2d
+                                (* (/ (- (.x p) a) (- b a)) width)
+                                (- height (* (/ (- (.y p) minval) (- maxval minval)) height))))
             screen-pts (map point-to-screen pts)]
         (doto g
           (.setColor Color/WHITE)
           (.fillRect 0 0 width height)
           (.setColor Color/BLACK))
-        (doseq [line (map into screen-pts (rest screen-pts))]
-          (apply (partial draw-line g) line))))))
+        (doseq [line (map line2d screen-pts (rest screen-pts))]
+          (.draw g line))))))
