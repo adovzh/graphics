@@ -3,6 +3,11 @@
     java.awt.Color
     javax.swing.JComponent))
 
+(defn- draw-line
+  "Auxiliary function to draw a line in a Clojure way"
+  [g x1 y1 x2 y2]
+  (.drawLine g x1 y1 x2 y2))
+
 (defn create-graph
   "Creates a graph"
   [fnc a b]
@@ -26,4 +31,5 @@
           (.setColor Color/WHITE)
           (.fillRect 0 0 width height)
           (.setColor Color/BLACK))
-        (reduce #(do (.drawLine g (first %1) (second %1) (first %2) (second %2)) %2) screen-pts)))))
+        (doseq [line (map into screen-pts (rest screen-pts))]
+          (apply (partial draw-line g) line))))))
