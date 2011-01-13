@@ -1,4 +1,6 @@
-(ns dan.graphics.util
+(ns #^{:doc "Useful functions and macros"
+       :author "Alexander Dovzhikov"} 
+  dan.graphics.util
   (:import java.awt.Toolkit))
 
 (defn center-component

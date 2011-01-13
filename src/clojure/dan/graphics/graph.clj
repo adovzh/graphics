@@ -1,4 +1,6 @@
-(ns dan.graphics.graph
+(ns #^{:doc "The functionality concerning the graphics"
+       :author "Alexander Dovzhikov"}
+  dan.graphics.graph
   (:use (dan.graphics util))
   (:import
     java.awt.Color
