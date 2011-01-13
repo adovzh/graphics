@@ -2,6 +2,7 @@
   (:import
     java.awt.Color
     (java.awt.geom Line2D$Double Point2D$Double)
+    java.awt.event.MouseMotionAdapter
     javax.swing.JComponent))
 
 (defn- point2d
@@ -14,8 +15,10 @@
   [p1 p2]
   (Line2D$Double. p1 p2))
 
-(defn create-graph
-  "Creates a graph"
+(defstruct graph-config :func :a :b :mouse-over)
+
+(defn create-graph-component
+  "Creates a graph component"
   [fnc a b]
   (proxy [JComponent] []
     (paintComponent [g]
@@ -39,3 +42,16 @@
           (.setColor Color/BLACK))
         (doseq [line (map line2d screen-pts (rest screen-pts))]
           (.draw g line))))))
+
+(defn create-graph
+  "Factory method for creating graphs"
+  [config]
+  (let [graph (apply create-graph-component (map config [:func :a :b]))]
+    (when-let [mouse-over (:mouse-over config)]
+      (.addMouseMotionListener graph
+        (proxy [MouseMotionAdapter] []
+          (mouseMoved [e]
+            (let [x (.getX e)
+                  y (.getY e)]
+              (mouse-over x y))))))
+    graph))
