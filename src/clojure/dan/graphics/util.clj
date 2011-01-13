@@ -23,5 +23,5 @@
   "Similar mouseMoved macro"
   [component event & body]
   `(.addMouseMotionListener ~component
-    (proxy [java.awt.event.MouseMotionListener] []
+    (proxy [java.awt.event.MouseMotionAdapter] []
       (mouseMoved [~event] ~@body))))
