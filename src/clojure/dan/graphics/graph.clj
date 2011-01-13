@@ -1,4 +1,5 @@
 (ns dan.graphics.graph
+  (:use (dan.graphics util))
   (:import
     java.awt.Color
     (java.awt.geom Line2D$Double Point2D$Double)
@@ -54,12 +55,10 @@
   (let [state (ref (apply struct graph-state-struct (map config [:func :a :b])))
         component (create-graph-component state)]
     (when-let [mouse-over (:mouse-over config)]
-      (.addMouseMotionListener component
-        (proxy [MouseMotionAdapter] []
-          (mouseMoved [e]
-            (let [x (.getX e)
-                  y (.getY e)]
-              (mouse-over x y))))))
+      (on-mouse-move component e
+        (let [x (.getX e)
+              y (.getY e)]
+          (mouse-over x y))))
     (struct graph component state)))
 
 (defn modify-graph-func! [state new-func]

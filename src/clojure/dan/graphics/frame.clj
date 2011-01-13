@@ -18,7 +18,7 @@
 (def combo-map {:sin sin :sqr sqr})
 
 ; main graph
-(def main-graph (create-graph (struct graph-config (:sin combo-map) -5 5)))
+(def main-graph (create-graph (struct graph-config (:sin combo-map) -5 5 print-position)))
 
 (defn combo-action [action]
   (let [g-component (:component main-graph)
@@ -28,11 +28,8 @@
 
 (defn create-function-combo []
   (doto (JComboBox. (to-array (keys combo-map)))
-    (.addActionListener
-      (proxy [ActionListener] []
-        (actionPerformed [e]
-          (let [selected (.. e (getSource) (getSelectedItem))]
-            (combo-action selected)))))))
+    (on-action e
+      (combo-action (.. e (getSource) (getSelectedItem))))))
 
 (defn create-combo-panel []
   (doto (JPanel.)

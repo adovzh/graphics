@@ -9,3 +9,17 @@
     (.setLocation component
       (/ (- (.width screen-size) (.width component-size)) 2)
       (/ (- (.height screen-size) (.height component-size)) 2))))
+
+(defmacro on-action
+  "Tribute to Stuart Sierra"
+  [component event & body]
+  `(.addActionListener ~component
+    (proxy [java.awt.event.ActionListener] []
+      (actionPerformed [~event] ~@body))))
+
+(defmacro on-mouse-move
+  "Similar mouseMoved macro"
+  [component event & body]
+  `(.addMouseMotionListener ~component
+    (proxy [java.awt.event.MouseMotionListener] []
+      (mouseMoved [~event] ~@body))))
