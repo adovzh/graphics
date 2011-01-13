@@ -3,7 +3,7 @@
   (:import
     (java.awt BorderLayout)
     (java.awt.event ActionListener)
-    (javax.swing JComboBox JPanel JFrame)))
+    (javax.swing JComboBox JLabel JPanel JFrame)))
 
 (defn sin [x] (Math/sin x))
 (defn sqr [x] (* x x))
@@ -17,8 +17,19 @@
 ; dispatch map for functions
 (def combo-map {:sin sin :sqr sqr})
 
+(def function-combo
+  (JComboBox. (to-array (keys combo-map))))
+
+(def combo-panel (JPanel.))
+(def status-label (JLabel.))
+
+(defn set-status-position [x y]
+  (.setText status-label
+    (format "(%d,%d)" x y))
+  (.repaint combo-panel))
+
 ; main graph
-(def main-graph (create-graph (struct graph-config (:sin combo-map) -5 5 print-position)))
+(def main-graph (create-graph (struct graph-config (:sin combo-map) -5 5 set-status-position)))
 
 (defn combo-action [action]
   (let [g-component (:component main-graph)
@@ -27,13 +38,14 @@
     (.repaint g-component)))
 
 (defn create-function-combo []
-  (doto (JComboBox. (to-array (keys combo-map)))
+  (doto function-combo
     (on-action e
       (combo-action (.. e (getSource) (getSelectedItem))))))
 
 (defn create-combo-panel []
-  (doto (JPanel.)
-    (.add (create-function-combo))))
+  (doto combo-panel
+    (.add (create-function-combo))
+    (.add status-label)))
 
 (defn create-content-panel []
   (let [g-component (:component main-graph)]
