@@ -18,9 +18,13 @@
 
 ; dispatch map for functions
 (def combo-map {:sin sin :sqr sqr})
+(def combo-map-string {:sin "Sinus" :sqr "X^2"})
+
+(defn combo-item [key]
+  (keyword-wrapper key combo-map-string))
 
 (def function-combo
-  (JComboBox. (to-array (keys combo-map))))
+  (JComboBox. (to-array (map combo-item (keys combo-map)))))
 
 (def combo-panel (JPanel.))
 (def status-label (JLabel.))
