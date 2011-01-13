@@ -16,14 +16,19 @@
   (Line2D$Double. p1 p2))
 
 (defstruct graph-config :func :a :b :mouse-over)
+(defstruct graph-state-struct :func :a :b)
+(defstruct graph :component :state)
 
 (defn create-graph-component
   "Creates a graph component"
-  [fnc a b]
+  [state]
   (proxy [JComponent] []
     (paintComponent [g]
       (proxy-super paintComponent g)
-      (let [width (.getWidth this)
+      (let [fnc (:func @state)
+            a (:a @state)
+            b (:b @state)
+            width (.getWidth this)
             height (.getHeight this)
             step 0.01
             xs (range a (+ b step) step)
@@ -46,12 +51,17 @@
 (defn create-graph
   "Factory method for creating graphs"
   [config]
-  (let [graph (apply create-graph-component (map config [:func :a :b]))]
+  (let [state (ref (apply struct graph-state-struct (map config [:func :a :b])))
+        component (create-graph-component state)]
     (when-let [mouse-over (:mouse-over config)]
-      (.addMouseMotionListener graph
+      (.addMouseMotionListener component
         (proxy [MouseMotionAdapter] []
           (mouseMoved [e]
             (let [x (.getX e)
                   y (.getY e)]
               (mouse-over x y))))))
-    graph))
+    (struct graph component state)))
+
+(defn modify-graph-func! [state new-func]
+  (dosync
+    (alter state assoc :func new-func)))

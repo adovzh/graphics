@@ -2,7 +2,8 @@
   (:use (dan.graphics graph util))
   (:import
     (java.awt BorderLayout)
-    (javax.swing JPanel JFrame)))
+    (java.awt.event ActionListener)
+    (javax.swing JComboBox JPanel JFrame)))
 
 (defn sin [x] (Math/sin x))
 (defn sqr [x] (* x x))
@@ -11,13 +12,43 @@
   (printf "Mouse: (%d,%d)%n" x y)
   (flush))
 
-(doto (JFrame. "Graphics")
-  (.setContentPane
-    (.add
-      (JPanel. (BorderLayout.))
-      (create-graph (struct graph-config sqr -5 5 print-position))))
-  (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
-  (.setSize 400 300)
-  (center-component)
-  (.setVisible true))
+(defstruct func-desc :func :name)
+
+; dispatch map for functions
+(def combo-map {:sin sin :sqr sqr})
+
+; main graph
+(def main-graph (create-graph (struct graph-config (:sin combo-map) -5 5)))
+
+(defn combo-action [action]
+  (let [g-component (:component main-graph)
+        g-state (:state main-graph)]
+    (modify-graph-func! g-state (action combo-map))
+    (.repaint g-component)))
+
+(defn create-function-combo []
+  (doto (JComboBox. (to-array (keys combo-map)))
+    (.addActionListener
+      (proxy [ActionListener] []
+        (actionPerformed [e]
+          (let [selected (.. e (getSource) (getSelectedItem))]
+            (combo-action selected)))))))
+
+(defn create-combo-panel []
+  (doto (JPanel.)
+    (.add (create-function-combo))))
+
+(defn create-content-panel []
+  (let [g-component (:component main-graph)]
+    (doto (JPanel. (BorderLayout.))
+      (.add (create-combo-panel) BorderLayout/NORTH)
+      (.add g-component BorderLayout/CENTER))))
+
+(let [content-panel (JPanel. (BorderLayout.))]
+  (doto (JFrame. "Graphics")
+    (.setContentPane (create-content-panel))
+    (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
+    (.setSize 400 300)
+    (center-component)
+    (.setVisible true)))
 
