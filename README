@@ -1,1 +1,6 @@
-This is a mock implementation of graphics project.
+This is my personal project for playing with Clojure and GitHub.
+
+At the moment the development is around the graph of the mathematical function defined on the [a,b] interval.
+
+Entry point: dan/graphics/frame.clj
+Ant script can be added later.
