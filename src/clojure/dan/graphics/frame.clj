@@ -29,7 +29,7 @@
 
 (defn set-status-position [x y]
   (.setText status-label
-    (format "(%d,%d)" x y))
+    (format "(%.2f;%.2f)" x y))
   (.repaint combo-panel))
 
 ; main graph
