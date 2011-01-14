@@ -14,9 +14,7 @@
   (printf "Mouse: (%d,%d)%n" x y)
   (flush))
 
-(defstruct func-desc :func :name)
-
-; dispatch map for functions
+; dispatch maps for functions
 (def combo-map {:sin sin :sqr sqr})
 (def combo-map-string {:sin "Sinus" :sqr "X^2"})
 
@@ -37,11 +35,11 @@
 ; main graph
 (def main-graph (create-graph (struct graph-config (:sin combo-map) -5 5 set-status-position)))
 
-(defn combo-action [action]
-  (let [g-component (:component main-graph)
-        g-state (:state main-graph)]
-    (modify-graph-func! g-state (action combo-map))
-    (.repaint g-component)))
+(defn combo-action
+  "Executed when new combobox item is selected. Action is a keyword."
+  [action]
+  (modify-graph-func! main-graph (action combo-map))
+  (.repaint (graph-component main-graph)))
 
 (defn create-function-combo []
   (doto function-combo

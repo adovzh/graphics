@@ -20,7 +20,9 @@
 
 (defstruct graph-config :func :a :b :mouse-over)
 (defstruct graph-state-struct :func :a :b)
-(defstruct graph :component :state)
+(defstruct graph-struct :component :state)
+(def graph-component (accessor graph-struct :component))
+(def graph-state (accessor graph-struct :state))
 
 (defn create-graph-component
   "Creates a graph component"
@@ -61,8 +63,10 @@
         (let [x (.getX e)
               y (.getY e)]
           (mouse-over x y))))
-    (struct graph component state)))
+    (struct graph-struct component state)))
 
-(defn modify-graph-func! [state new-func]
+(defn modify-graph-func!
+  "Update graph state with a new function"
+  [graph new-func]
   (dosync
-    (alter state assoc :func new-func)))
+    (alter (graph-state graph) assoc :func new-func)))
