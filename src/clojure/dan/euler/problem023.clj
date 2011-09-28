@@ -57,18 +57,4 @@ Find the sum of all the positive integers which cannot be written as the sum of 
       (range 12 (inc (int (/ number 2)))))
     false))
 
-;(println (filter (comp not abundantsum?) (range 1 25000)))
 (println "[Problem 23]: " (reduce + (filter (comp not abundantsum?) (range 1 28124))))
-
-;(println "Hello!")
-;(doseq [x (range 2 49)] (println x (factors x) (reduce + (factors x)) "Abundant?" (abundant? x) "Abundant sum?" (abundantsum? x)))
-;
-;(defn not-abundant-sum
-;  [num x]
-;  (or
-;    (not (abundant? x))
-;    (not (abundant? (- num x)))))
-;
-;(println "12: " (some (partial not-abundant-sum 48) (range 12 (inc (int (/ 48 2))))))
-;(println (range 12 (inc (int (/ 48 2)))))
-;(println (map (partial not-abundant-sum 48) (range 12 (inc (int (/ 48 2))))))
