@@ -33,7 +33,7 @@ What is the first term in the Fibonacci sequence to contain 1000 digits?")
 (def fibonacci-seq (iterate-2 + 1 1))
 
 (defn problem25
-  "Solves problem 24 of Project Euler and returns the result"
+  "Solves problem 25 of Project Euler and returns the result"
   []
   (inc (count (take-while (fn [x] (< (count (str x)) 1000)) fibonacci-seq))))
 
