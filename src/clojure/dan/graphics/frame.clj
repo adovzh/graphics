@@ -57,11 +57,9 @@
       (.add (create-combo-panel) BorderLayout/NORTH)
       (.add g-component BorderLayout/CENTER))))
 
-(let [content-panel (JPanel. (BorderLayout.))]
-  (doto (JFrame. "Graphics")
-    (.setContentPane (create-content-panel))
-    (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
-    (.setSize 400 300)
-    (center-component)
-    (.setVisible true)))
-
+(doto (JFrame. "Graphics")
+  (.setContentPane (create-content-panel))
+  (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
+  (.setSize 400 300)
+  (center-component)
+  (.setVisible true))
