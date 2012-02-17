@@ -20,3 +20,14 @@
       (recur a (dec b) (* a acc)))))
 
 
+(defn in-sort!
+  "Insertion sort"
+  [col]
+  (letfn [(insert
+            ([raw x] (insert [] raw x))
+            ([sorted [y & raw] x]
+              (cond
+                (nil? y) (conj sorted x)
+                (<= x y) (concat sorted [x y] raw)
+                :else    (recur (conj sorted y) raw x))))]
+    (reduce insert [] col)))
