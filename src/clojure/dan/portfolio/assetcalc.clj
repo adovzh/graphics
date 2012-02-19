@@ -2,8 +2,12 @@
        :author "Alexander Dovzhikov"}
   dan.portfolio.assetcalc)
 
+;; Price (it's Quote actually)
+
+(defrecord Price [bid ask])
+
 (defn create-price [bid ask]
-  {:bid bid :ask ask})
+  (Price. bid ask))
 
 (defn bid [prc]
   (:bid prc))
@@ -11,11 +15,19 @@
 (defn ask [prc]
   (:ask prc))
 
+;; Currency
+
+(defrecord Currency [name])
+
 (defn create-currency [currency-name]
-  {:name currency-name})
+  (Currency. currency-name))
+
+;; Account
+
+(defrecord Account [name currency amount])
 
 (defn create-account [account-name account-currency]
-  {:name account-name :currency account-currency :amount 0})
+  (Currency. account-name account-currency 0))
 
 ;; Program code
 (def rouble (create-currency "Rouble"))
@@ -35,3 +47,4 @@
 (println "Expected ask:" expected-ask "; Actual ask:" (ask prc) "; Test:" (= expected-ask (ask prc)))
 (println "Dollar bid: " (bid (rates dollar)))
 (println "Euro ask: " (ask (rates euro)))
+(println "Euro ask: " (-> euro rates ask))
