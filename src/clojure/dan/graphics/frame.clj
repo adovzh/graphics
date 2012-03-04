@@ -1,7 +1,9 @@
 (ns #^{:doc "The main window of the Graphics application"
        :author "Alexander Dovzhikov"}
   dan.graphics.frame
-  (:use (dan.graphics graph util))
+  (:use
+    dan.swing
+    (dan.graphics graph util))
   (:import
     (java.awt BorderLayout)
     (java.awt.event ActionListener)
