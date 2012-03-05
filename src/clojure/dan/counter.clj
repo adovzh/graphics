@@ -3,7 +3,7 @@
   dan.counter
   (:use dan.swing)
   (:import (java.awt BorderLayout Font)
-           (javax.swing JButton JLabel JPanel)))
+           (javax.swing JLabel JPanel)))
 
 (defn create-counter-label
   [val]
@@ -15,7 +15,7 @@
   []
   (let [counter (atom 0)
         label (create-counter-label @counter)
-        update-value (fn [] (.setText label (str @counter)))
+        update-value #(.setText label (str @counter))
         timer (timer 1000 (swap! counter inc) (update-value))]
     (doto (JPanel. (BorderLayout.))
       (.add
